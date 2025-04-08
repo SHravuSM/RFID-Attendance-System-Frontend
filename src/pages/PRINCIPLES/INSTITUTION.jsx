@@ -652,7 +652,7 @@ const INSTITUTION = () => {
 
           {/* Centered Title */}
           <h2 className="absolute left-1/2 transform -translate-x-1/2 text-lg font-semibold text-gray-800">
-            CtrlCurv
+            ShantShiv
           </h2>
         </div>
       </div>

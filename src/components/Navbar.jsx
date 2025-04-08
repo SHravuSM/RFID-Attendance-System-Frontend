@@ -31,7 +31,7 @@ export default function Navbar() {
           to="/"
           className="text-3xl font-mono font-medium text-blue-700 tracking-wide"
         >
-          Ctrl-Curv
+          ShantShiv
         </Link>
 
         {/* Login Button (Icon for Mobile, Text for Desktop) */}

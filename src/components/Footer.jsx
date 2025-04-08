@@ -35,7 +35,7 @@ export default function Footer() {
             <span className="text-white">Shiv</span>{" "}
             <span className="text-blue-500">Technologies</span>
             <br />
-            <p className="text-lg text-slate-400">RFID Attendance</p>
+            <p className="text-lg text-slate-400">RFID Attendance System</p>
           </h2>
           <p className="text-sm font-sans leading-relaxed text-gray-400">
             Simplifying attendance management for Schools, Colleges &
@@ -52,7 +52,7 @@ export default function Footer() {
             Contact
           </h3>
           <p className="text-sm text-gray-400 mb-2">
-            www.support@shantshiv.com
+            support@shantshiv.com
           </p>
           <p className="text-sm text-gray-400">+91 7411361004</p>
         </div>

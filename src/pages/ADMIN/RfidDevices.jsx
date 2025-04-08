@@ -42,7 +42,7 @@ const DeviceRow = ({ device, onDelete, onToggleStatus }) => (
   </tr>
 );
 
-const RfidDevices = () => {
+const ARfidDevices = () => {
   const [devices, setDevices] = useState(fakeDevices);
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -79,7 +79,9 @@ const RfidDevices = () => {
 
   return (
     <div className="p-8">
-      <h1 className="text-2xl font-semibold mb-6 text-gray-800">RFID Devices</h1>
+      <h1 className="text-2xl font-semibold mb-6 text-gray-800">
+        RFID Devices
+      </h1>
 
       <input
         type="text"
@@ -96,10 +98,18 @@ const RfidDevices = () => {
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-3 text-left text-sm text-gray-700">Device ID</th>
-              <th className="px-6 py-3 text-left text-sm text-gray-700">School</th>
-              <th className="px-6 py-3 text-left text-sm text-gray-700">Status</th>
-              <th className="px-6 py-3 text-center text-sm text-gray-700">Actions</th>
+              <th className="px-6 py-3 text-left text-sm text-gray-700">
+                Device ID
+              </th>
+              <th className="px-6 py-3 text-left text-sm text-gray-700">
+                School
+              </th>
+              <th className="px-6 py-3 text-left text-sm text-gray-700">
+                Status
+              </th>
+              <th className="px-6 py-3 text-center text-sm text-gray-700">
+                Actions
+              </th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
@@ -150,4 +160,4 @@ const RfidDevices = () => {
   );
 };
 
-export default RfidDevices;
+export default ARfidDevices;

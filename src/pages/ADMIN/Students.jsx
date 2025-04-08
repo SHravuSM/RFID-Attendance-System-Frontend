@@ -1,254 +1,73 @@
-// import { useEffect, useState } from "react";
-// import { useNavigate } from "react-router-dom";
-// import { Pencil, Trash2, ArrowUp, ArrowDown } from "lucide-react";
+// import { useState, useEffect } from "react";
+// import { Pencil, Trash2 } from "lucide-react";
+// import api from "../../api";
 
-// const Students = () => {
-//   const navigate = useNavigate();
+// const AStudents = () => {
 //   const [students, setStudents] = useState([]);
 //   const [search, setSearch] = useState("");
 //   const [selectedClass, setSelectedClass] = useState("All");
 //   const [currentPage, setCurrentPage] = useState(1);
 //   const [studentsPerPage, setStudentsPerPage] = useState(5);
+//   const [sortConfig, setSortConfig] = useState({
+//     key: "name",
+//     direction: "asc",
+//   });
 //   const [loading, setLoading] = useState(true);
-
-//   useEffect(() => {
-//     fetchStudents();
-//   }, []);
+//   const [error, setError] = useState(null);
 
 //   const fetchStudents = async () => {
-//     setLoading(true);
 //     try {
-//       const response = await fetch("http://localhost:3000/api/students");
-//       const data = await response.json();
-//       setStudents(data);
-//     } catch (error) {
-//       console.error("Error fetching students:", error);
+//       setLoading(true);
+//       const response = await api.get("/admin/students");
+//       setStudents(response.data);
+//     } catch (err) {
+//       setError(err.response?.data?.message || "Failed to fetch students");
 //     } finally {
 //       setLoading(false);
 //     }
 //   };
 
-//   // const handlePromote = async (id, currentClass) => {
-//   //   try {
-//   //     await fetch(`http://localhost:3000/api/students/${id}/promote`, {
-//   //       method: "PATCH",
-//   //     });
-//   //     fetchStudents();
-//   //   } catch (error) {
-//   //     console.error("Error promoting student:", error);
-//   //   }
-//   // };
+//   useEffect(() => {
+//     fetchStudents();
+//   }, []);
 
-//   // const handleDepromote = async (id, currentClass) => {
-//   //   try {
-//   //     await fetch(`http://localhost:3000/api/students/${id}/depromote`, {
-//   //       method: "PATCH",
-//   //     });
-//   //     fetchStudents();
-//   //   } catch (error) {
-//   //     console.error("Error depromoting student:", error);
-//   //   }
-//   // };
-
-//   const filteredStudents = students.filter(
-//     (student) =>
-//       (selectedClass === "All" || student.className === selectedClass) &&
-//       (student.name.toLowerCase().includes(search.toLowerCase()) ||
-//         student.rollNumber.toLowerCase().includes(search.toLowerCase()))
-//   );
-
-//   const indexOfLast = currentPage * studentsPerPage;
-//   const indexOfFirst = indexOfLast - studentsPerPage;
-//   const currentStudents = filteredStudents.slice(indexOfFirst, indexOfLast);
-//   const totalPages = Math.ceil(filteredStudents.length / studentsPerPage);
-
-//   return (
-//     <div className="p-8">
-//       <h1 className="text-2xl font-semibold mb-6 text-gray-800">Students</h1>
-
-//       <div className="flex flex-wrap gap-4 mb-6">
-//         <input
-//           type="text"
-//           placeholder="Search by name or roll number..."
-//           value={search}
-//           onChange={(e) => {
-//             setSearch(e.target.value);
-//             setCurrentPage(1);
-//           }}
-//           className="border px-4 py-2 rounded focus:ring-2 focus:ring-blue-500"
-//         />
-//         <select
-//           value={selectedClass}
-//           onChange={(e) => {
-//             setSelectedClass(e.target.value);
-//             setCurrentPage(1);
-//           }}
-//           className="border px-4 py-2 rounded focus:ring-2 focus:ring-blue-500"
-//         >
-//           <option value="All">All Classes</option>
-//           {[...new Set(students.map((s) => s.className))].map((className) => (
-//             <option key={className} value={className}>
-//               {className}
-//             </option>
-//           ))}
-//         </select>
-//       </div>
-
-//       {loading ? (
-//         <p className="text-center text-gray-600">Loading...</p>
-//       ) : (
-//         <div className="overflow-x-auto bg-white shadow rounded-lg">
-//           <table className="min-w-full divide-y divide-gray-200">
-//             <thead className="bg-gray-50">
-//               <tr>
-//                 <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">
-//                   Roll No
-//                 </th>
-//                 <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">
-//                   Name
-//                 </th>
-//                 <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">
-//                   Class
-//                 </th>
-//                 {/* <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">
-//                   Actions
-//                 </th> */}
-//               </tr>
-//             </thead>
-//             <tbody className="bg-white divide-y divide-gray-200">
-//               {currentStudents.map((student) => (
-//                 <tr key={student._id} className="hover:bg-gray-50 transition">
-//                   <td
-//                     className="px-6 py-4 cursor-pointer text-sm text-gray-800"
-//                     onClick={() => navigate(`/students/${student._id}`)}
-//                   >
-//                     {student.rollNumber}
-//                   </td>
-//                   <td className="px-6 py-4 text-sm text-gray-800">
-//                     {student.name}
-//                   </td>
-//                   <td className="px-6 py-4 text-sm text-gray-800">
-//                     {student.className}
-//                   </td>
-//                   {/* <td className="px-6 py-4 flex space-x-2">
-//                     <button
-//                       className="text-green-600 hover:text-green-800 flex items-center"
-//                       onClick={() =>
-//                         handlePromote(student._id, student.className)
-//                       }
-//                     >
-//                       <ArrowUp size={16} className="mr-1" /> Promote
-//                     </button>
-//                     <button
-//                       className="text-red-600 hover:text-red-800 flex items-center"
-//                       onClick={() =>
-//                         handleDepromote(student._id, student.className)
-//                       }
-//                     >
-//                       <ArrowDown size={16} className="mr-1" /> Depromote
-//                     </button>
-//                   </td> */}
-//                 </tr>
-//               ))}
-//             </tbody>
-//           </table>
-
-//           {currentStudents.length === 0 && (
-//             <p className="text-center text-gray-500 py-4">No students found.</p>
-//           )}
-//         </div>
-//       )}
-
-//       {/* Pagination */}
-//       <div className="flex justify-between items-center mt-6">
-//         <p className="text-sm text-gray-600">
-//           Page {currentPage} of {totalPages}
-//         </p>
-//         <div className="flex space-x-2">
-//           <button
-//             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-//             disabled={currentPage === 1}
-//             className="px-3 py-1 border rounded disabled:opacity-50"
-//           >
-//             Prev
-//           </button>
-//           {[...Array(totalPages)].map((_, i) => (
-//             <button
-//               key={i}
-//               onClick={() => setCurrentPage(i + 1)}
-//               className={`px-3 py-1 border rounded ${
-//                 currentPage === i + 1 ? "bg-blue-500 text-white" : ""
-//               }`}
-//             >
-//               {i + 1}
-//             </button>
-//           ))}
-//           <button
-//             onClick={() =>
-//               setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-//             }
-//             disabled={currentPage === totalPages}
-//             className="px-3 py-1 border rounded disabled:opacity-50"
-//           >
-//             Next
-//           </button>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// // export default Students;
-// import { useState } from "react";
-// import { Pencil, Trash2 } from "lucide-react";
-
-// const fakeStudents = [
-//   { id: 1, name: "Aarav Sharma", rollNumber: "STU001", class: "10A", contact: "9876543210" },
-//   { id: 2, name: "Priya Patel", rollNumber: "STU002", class: "9B", contact: "9876543211" },
-//   { id: 3, name: "Rahul Verma", rollNumber: "STU003", class: "10B", contact: "9876543212" },
-//   { id: 4, name: "Sneha Iyer", rollNumber: "STU004", class: "8A", contact: "9876543213" },
-//   { id: 5, name: "Karan Joshi", rollNumber: "STU005", class: "9A", contact: "9876543214" },
-//   { id: 6, name: "Meera Rao", rollNumber: "STU006", class: "10A", contact: "9876543215" },
-//   { id: 7, name: "Nikhil Gupta", rollNumber: "STU007", class: "9B", contact: "9876543216" },
-//   { id: 8, name: "Divya Singh", rollNumber: "STU008", class: "8A", contact: "9876543217" },
-//   { id: 9, name: "Aditya Reddy", rollNumber: "STU009", class: "10B", contact: "9876543218" },
-//   { id: 10, name: "Riya Nair", rollNumber: "STU010", class: "9A", contact: "9876543219" },
-// ];
-
-// const Students = () => {
-//   const [students, setStudents] = useState(fakeStudents);
-//   const [search, setSearch] = useState("");
-//   const [selectedClass, setSelectedClass] = useState("All");
-//   const [currentPage, setCurrentPage] = useState(1);
-//   const [studentsPerPage, setStudentsPerPage] = useState(5);
-//   const [sortConfig, setSortConfig] = useState({ key: "name", direction: "asc" });
-
-//   const handleDelete = (id) => {
-//     const confirmed = window.confirm("Are you sure you want to delete this student?");
+//   const handleDelete = async (id) => {
+//     const confirmed = window.confirm(
+//       "Are you sure you want to delete this student?"
+//     );
 //     if (confirmed) {
-//       setStudents(students.filter((student) => student.id !== id));
+//       try {
+//         await api.delete(`/admin/students/${id}`);
+//         fetchStudents();
+//       } catch (err) {
+//         alert(err.response?.data?.message || "Error deleting student.");
+//       }
 //     }
 //   };
 
 //   const groupedStudents = students.reduce((acc, student) => {
-//     if (!acc[student.class]) {
-//       acc[student.class] = [];
-//     }
-//     acc[student.class].push(student);
+//     const cls = student.class || student.className;
+//     if (!acc[cls]) acc[cls] = [];
+//     acc[cls].push(student);
 //     return acc;
 //   }, {});
+
 //   const sortedClasses = Object.keys(groupedStudents).sort();
 
 //   const filteredStudents = students
-//     .filter(
-//       (student) =>
-//         (selectedClass === "All" || student.class === selectedClass) &&
+//     .filter((student) => {
+//       const cls = student.class || student.className;
+//       return (
+//         (selectedClass === "All" || cls === selectedClass) &&
 //         (student.name.toLowerCase().includes(search.toLowerCase()) ||
 //           student.rollNumber.toLowerCase().includes(search.toLowerCase()))
-//     )
+//       );
+//     })
 //     .sort((a, b) => {
-//       if (a[sortConfig.key] < b[sortConfig.key]) return sortConfig.direction === "asc" ? -1 : 1;
-//       if (a[sortConfig.key] > b[sortConfig.key]) return sortConfig.direction === "asc" ? 1 : -1;
+//       const aVal = a[sortConfig.key] || a.className;
+//       const bVal = b[sortConfig.key] || b.className;
+//       if (aVal < bVal) return sortConfig.direction === "asc" ? -1 : 1;
+//       if (aVal > bVal) return sortConfig.direction === "asc" ? 1 : -1;
 //       return 0;
 //     });
 
@@ -259,9 +78,8 @@
 
 //   const handleSort = (key) => {
 //     let direction = "asc";
-//     if (sortConfig.key === key && sortConfig.direction === "asc") {
+//     if (sortConfig.key === key && sortConfig.direction === "asc")
 //       direction = "desc";
-//     }
 //     setSortConfig({ key, direction });
 //   };
 
@@ -274,230 +92,173 @@
 //     <div className="p-8">
 //       <h1 className="text-2xl font-semibold mb-6 text-gray-800">Students</h1>
 
-//       {/* Filters */}
-//       <div className="flex flex-col md:flex-row md:items-center md:space-x-4 space-y-4 md:space-y-0 mb-6">
-//         <input
-//           type="text"
-//           placeholder="Search by name or roll number..."
-//           value={search}
-//           onChange={(e) => {
-//             setSearch(e.target.value);
-//             setCurrentPage(1);
-//           }}
-//           className="w-full md:w-1/3 px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-//         />
-//         <select
-//           value={selectedClass}
-//           onChange={(e) => {
-//             setSelectedClass(e.target.value);
-//             setCurrentPage(1);
-//           }}
-//           className="w-full md:w-1/4 px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-//         >
-//           <option value="All">All Classes</option>
-//           {sortedClasses.map((className) => (
-//             <option key={className} value={className}>
-//               {className}
-//             </option>
-//           ))}
-//         </select>
-//         <select
-//           value={studentsPerPage}
-//           onChange={(e) => {
-//             setStudentsPerPage(Number(e.target.value));
-//             setCurrentPage(1);
-//           }}
-//           className="w-full md:w-1/4 px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-//         >
-//           {[5, 10, 15, 20].map((count) => (
-//             <option key={count} value={count}>
-//               {count} per page
-//             </option>
-//           ))}
-//         </select>
-//       </div>
+//       {loading && (
+//         <p className="text-center text-gray-600">Loading students...</p>
+//       )}
+//       {error && <p className="text-center text-red-600">Error: {error}</p>}
 
-//       {/* Table */}
-//       <div className="overflow-x-auto bg-white shadow rounded-lg">
-//         <table className="min-w-full divide-y divide-gray-200">
-//           <thead className="bg-gray-50">
-//             <tr>
-//               <th
-//                 className="px-6 py-3 text-left text-sm font-medium text-gray-700 cursor-pointer"
-//                 onClick={() => handleSort("rollNumber")}
-//               >
-//                 Roll No {getSortIcon("rollNumber")}
-//               </th>
-//               <th
-//                 className="px-6 py-3 text-left text-sm font-medium text-gray-700 cursor-pointer"
-//                 onClick={() => handleSort("name")}
-//               >
-//                 Name {getSortIcon("name")}
-//               </th>
-//               <th
-//                 className="px-6 py-3 text-left text-sm font-medium text-gray-700 cursor-pointer"
-//                 onClick={() => handleSort("class")}
-//               >
-//                 Class {getSortIcon("class")}
-//               </th>
-//               <th
-//                 className="px-6 py-3 text-left text-sm font-medium text-gray-700 cursor-pointer"
-//                 onClick={() => handleSort("contact")}
-//               >
-//                 Contact {getSortIcon("contact")}
-//               </th>
-//               <th className="px-6 py-3 text-center text-sm font-medium text-gray-700">Actions</th>
-//             </tr>
-//           </thead>
-//           <tbody className="bg-white divide-y divide-gray-200">
-//             {currentStudents.map((student) => (
-//               <tr key={student.id} className="hover:bg-gray-50 transition">
-//                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{student.rollNumber}</td>
-//                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{student.name}</td>
-//                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{student.class}</td>
-//                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{student.contact}</td>
-//                 <td className="px-6 py-4 whitespace-nowrap flex justify-center space-x-4">
-//                   <button className="text-blue-600 hover:text-blue-800">
-//                     <Pencil size={18} />
-//                   </button>
-//                   <button
-//                     className="text-red-600 hover:text-red-800"
-//                     onClick={() => handleDelete(student.id)}
-//                   >
-//                     <Trash2 size={18} />
-//                   </button>
-//                 </td>
-//               </tr>
-//             ))}
-//           </tbody>
-//         </table>
-
-//         {currentStudents.length === 0 && (
-//           <p className="text-center text-gray-500 py-4">No students found.</p>
-//         )}
-//       </div>
-
-//       {/* Pagination */}
-//       <div className="flex flex-col md:flex-row md:justify-between items-center mt-6 space-y-4 md:space-y-0">
-//         <p className="text-sm text-gray-600">
-//           Page {currentPage} of {totalPages}
-//         </p>
-//         <div className="flex space-x-2">
-//           <button
-//             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-//             disabled={currentPage === 1}
-//             className="px-3 py-1 border rounded disabled:opacity-50"
-//           >
-//             Prev
-//           </button>
-//           {[...Array(totalPages)].map((_, i) => (
-//             <button
-//               key={i}
-//               onClick={() => setCurrentPage(i + 1)}
-//               className={`px-3 py-1 border rounded ${
-//                 currentPage === i + 1 ? "bg-blue-500 text-white" : ""
-//               }`}
+//       {!loading && !error && (
+//         <>
+//           <div className="flex flex-col md:flex-row md:items-center md:space-x-4 space-y-4 md:space-y-0 mb-6">
+//             <input
+//               type="text"
+//               placeholder="Search by name or roll number..."
+//               value={search}
+//               onChange={(e) => {
+//                 setSearch(e.target.value);
+//                 setCurrentPage(1);
+//               }}
+//               className="w-full md:w-1/3 px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+//             />
+//             <select
+//               value={selectedClass}
+//               onChange={(e) => {
+//                 setSelectedClass(e.target.value);
+//                 setCurrentPage(1);
+//               }}
+//               className="w-full md:w-1/4 px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
 //             >
-//               {i + 1}
-//             </button>
-//           ))}
-//           <button
-//             onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-//             disabled={currentPage === totalPages}
-//             className="px-3 py-1 border rounded disabled:opacity-50"
-//           >
-//             Next
-//           </button>
-//         </div>
-//       </div>
+//               <option value="All">All Classes</option>
+//               {sortedClasses.map((className) => (
+//                 <option key={className} value={className}>
+//                   {className}
+//                 </option>
+//               ))}
+//             </select>
+//             <select
+//               value={studentsPerPage}
+//               onChange={(e) => {
+//                 setStudentsPerPage(Number(e.target.value));
+//                 setCurrentPage(1);
+//               }}
+//               className="w-full md:w-1/4 px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+//             >
+//               {[5, 10, 15, 20].map((count) => (
+//                 <option key={count} value={count}>
+//                   {count} per page
+//                 </option>
+//               ))}
+//             </select>
+//           </div>
+
+//           <div className="overflow-x-auto bg-white shadow rounded-lg">
+//             <table className="min-w-full divide-y divide-gray-200">
+//               <thead className="bg-gray-50">
+//                 <tr>
+//                   <th
+//                     onClick={() => handleSort("rollNumber")}
+//                     className="px-6 py-3 text-left cursor-pointer"
+//                   >
+//                     Roll No {getSortIcon("rollNumber")}
+//                   </th>
+//                   <th
+//                     onClick={() => handleSort("name")}
+//                     className="px-6 py-3 text-left cursor-pointer"
+//                   >
+//                     Name {getSortIcon("name")}
+//                   </th>
+//                   <th
+//                     onClick={() => handleSort("class")}
+//                     className="px-6 py-3 text-left cursor-pointer"
+//                   >
+//                     Class {getSortIcon("class")}
+//                   </th>
+//                   <th
+//                     onClick={() => handleSort("contact")}
+//                     className="px-6 py-3 text-left cursor-pointer"
+//                   >
+//                     Contact {getSortIcon("contact")}
+//                   </th>
+//                   <th className="px-6 py-3 text-center">Actions</th>
+//                 </tr>
+//               </thead>
+//               <tbody className="bg-white divide-y divide-gray-200">
+//                 {currentStudents.map((student) => (
+//                   <tr
+//                     key={student.id || student.rollNumber}
+//                     className="hover:bg-gray-50 transition"
+//                   >
+//                     <td className="px-6 py-4">{student.rollNumber}</td>
+//                     <td className="px-6 py-4">{student.name}</td>
+//                     <td className="px-6 py-4">
+//                       {student.class || student.className}
+//                     </td>
+//                     <td className="px-6 py-4">{student.contact}</td>
+//                     <td className="px-6 py-4 flex justify-center space-x-4">
+//                       <button
+//                         className="text-red-600 hover:text-red-800"
+//                         onClick={() => handleDelete(student.id)}
+//                       >
+//                         <Trash2 size={18} />
+//                       </button>
+//                     </td>
+//                   </tr>
+//                 ))}
+//               </tbody>
+//             </table>
+//             {currentStudents.length === 0 && (
+//               <p className="text-center text-gray-500 py-4">
+//                 No students found.
+//               </p>
+//             )}
+//           </div>
+//         </>
+//       )}
 //     </div>
 //   );
 // };
 
-// export default Students;
+// export default AStudents;
+
 
 import { useState, useEffect } from "react";
 import { Pencil, Trash2 } from "lucide-react";
+import api from "../../api";
 
-const Students = () => {
+const AStudents = () => {
   const [students, setStudents] = useState([]);
   const [search, setSearch] = useState("");
   const [selectedClass, setSelectedClass] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
   const [studentsPerPage, setStudentsPerPage] = useState(5);
-  const [sortConfig, setSortConfig] = useState({
-    key: "name",
-    direction: "asc",
-  });
+  const [sortConfig, setSortConfig] = useState({ key: "name", direction: "asc" });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Fetch students from API
-  const fetchStudents = async () => {
-    try {
-      setLoading(true);
-      const response = await fetch("http://localhost:3000/api/students");
-      if (!response.ok) throw new Error("Failed to fetch students");
-      const data = await response.json();
-      setStudents(data);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const [editStudent, setEditStudent] = useState(null);
+  const [editForm, setEditForm] = useState({ name: "", rollNumber: "", class: "", contact: "" });
+  const [updating, setUpdating] = useState(false);
+
   useEffect(() => {
     fetchStudents();
   }, []);
 
-  // const handleDelete = async (id) => {
-  //   const confirmed = window.confirm(
-  //     "Are you sure you want to delete this student?"
-  //   );
-  //   if (confirmed) {
-  //     try {
-  //       await fetch(`http://localhost:3000/api/students/${id}`, {
-  //         method: "DELETE",
-  //       });
-  //       fetchStudents();
-  //       // setStudents(students.filter((student) => student.id !== id));
-  //     } catch (err) {
-  //       alert("Error deleting student.");
-  //     }
-  //   }
-  // };
+  const fetchStudents = async () => {
+    try {
+      setLoading(true);
+      const res = await api.get("/admin/students");
+      setStudents(res.data);
+    } catch (err) {
+      setError(err.response?.data?.message || "Failed to fetch students.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  const groupedStudents = students.reduce((acc, student) => {
-    if (!acc[student.class]) acc[student.class] = [];
-    acc[student.class].push(student);
-    return acc;
-  }, {});
-  const sortedClasses = Object.keys(groupedStudents).sort();
-
-  const filteredStudents = students
-    .filter(
-      (student) =>
-        (selectedClass === "All" || student.class === selectedClass) &&
-        (student.name.toLowerCase().includes(search.toLowerCase()) ||
-          student.rollNumber.toLowerCase().includes(search.toLowerCase()))
-    )
-    .sort((a, b) => {
-      if (a[sortConfig.key] < b[sortConfig.key])
-        return sortConfig.direction === "asc" ? -1 : 1;
-      if (a[sortConfig.key] > b[sortConfig.key])
-        return sortConfig.direction === "asc" ? 1 : -1;
-      return 0;
-    });
-
-  const indexOfLast = currentPage * studentsPerPage;
-  const indexOfFirst = indexOfLast - studentsPerPage;
-  const currentStudents = filteredStudents.slice(indexOfFirst, indexOfLast);
-  const totalPages = Math.ceil(filteredStudents.length / studentsPerPage);
+  const handleDelete = async (id) => {
+    const confirmed = window.confirm("Are you sure you want to delete this student?");
+    if (!confirmed) return;
+    try {
+      await api.delete(`/admin/students/${id}`);
+      fetchStudents();
+    } catch (err) {
+      alert(err.response?.data?.message || "Error deleting student.");
+    }
+  };
 
   const handleSort = (key) => {
     let direction = "asc";
-    if (sortConfig.key === key && sortConfig.direction === "asc")
-      direction = "desc";
+    if (sortConfig.key === key && sortConfig.direction === "asc") direction = "desc";
     setSortConfig({ key, direction });
   };
 
@@ -506,14 +267,59 @@ const Students = () => {
     return sortConfig.direction === "asc" ? "▲" : "▼";
   };
 
+  const filteredStudents = students
+    .filter((s) => {
+      const cls = s.class || s.className;
+      return (
+        (selectedClass === "All" || cls === selectedClass) &&
+        (s.name.toLowerCase().includes(search.toLowerCase()) ||
+          s.rollNumber.toLowerCase().includes(search.toLowerCase()))
+      );
+    })
+    .sort((a, b) => {
+      const aVal = a[sortConfig.key] || a.className;
+      const bVal = b[sortConfig.key] || b.className;
+      if (aVal < bVal) return sortConfig.direction === "asc" ? -1 : 1;
+      if (aVal > bVal) return sortConfig.direction === "asc" ? 1 : -1;
+      return 0;
+    });
+
+  const indexOfLast = currentPage * studentsPerPage;
+  const indexOfFirst = indexOfLast - studentsPerPage;
+  const currentStudents = filteredStudents.slice(indexOfFirst, indexOfLast);
+  const totalPages = Math.ceil(filteredStudents.length / studentsPerPage);
+
+  const classOptions = [...new Set(students.map((s) => s.class || s.className))].sort();
+
+  const openEditModal = (student) => {
+    setEditStudent(student);
+    setEditForm({
+      name: student.name,
+      rollNumber: student.rollNumber,
+      class: student.class || student.className,
+      contact: student.contact,
+    });
+  };
+
+  const handleUpdate = async () => {
+    try {
+      setUpdating(true);
+      await api.put(`/admin/students/${editStudent.id}`, editForm);
+      setEditStudent(null);
+      setEditForm({ name: "", rollNumber: "", class: "", contact: "" });
+      fetchStudents();
+    } catch (err) {
+      alert(err.response?.data?.message || "Update failed.");
+    } finally {
+      setUpdating(false);
+    }
+  };
+
   return (
     <div className="p-8">
       <h1 className="text-2xl font-semibold mb-6 text-gray-800">Students</h1>
 
-      {/* Error and Loading States */}
-      {loading && (
-        <p className="text-center text-gray-600">Loading students...</p>
-      )}
+      {loading && <p className="text-center text-gray-600">Loading students...</p>}
       {error && <p className="text-center text-red-600">Error: {error}</p>}
 
       {!loading && !error && (
@@ -539,9 +345,9 @@ const Students = () => {
               className="w-full md:w-1/4 px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="All">All Classes</option>
-              {sortedClasses.map((className) => (
-                <option key={className} value={className}>
-                  {className}
+              {classOptions.map((cls) => (
+                <option key={cls} value={cls}>
+                  {cls}
                 </option>
               ))}
             </select>
@@ -553,9 +359,9 @@ const Students = () => {
               }}
               className="w-full md:w-1/4 px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
-              {[5, 10, 15, 20].map((count) => (
-                <option key={count} value={count}>
-                  {count} per page
+              {[5, 10, 20].map((num) => (
+                <option key={num} value={num}>
+                  {num} per page
                 </option>
               ))}
             </select>
@@ -566,51 +372,30 @@ const Students = () => {
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
-                  <th
-                    onClick={() => handleSort("rollNumber")}
-                    className="px-6 py-3 text-left cursor-pointer"
-                  >
-                    Roll No {getSortIcon("rollNumber")}
-                  </th>
-                  <th
-                    onClick={() => handleSort("name")}
-                    className="px-6 py-3 text-left cursor-pointer"
-                  >
-                    Name {getSortIcon("name")}
-                  </th>
-                  <th
-                    onClick={() => handleSort("class")}
-                    className="px-6 py-3 text-left cursor-pointer"
-                  >
-                    Class {getSortIcon("class")}
-                  </th>
-                  <th
-                    onClick={() => handleSort("contact")}
-                    className="px-6 py-3 text-left cursor-pointer"
-                  >
-                    Contact {getSortIcon("contact")}
-                  </th>
+                  {["rollNumber", "name", "class", "contact"].map((col) => (
+                    <th
+                      key={col}
+                      onClick={() => handleSort(col)}
+                      className="px-6 py-3 text-left cursor-pointer"
+                    >
+                      {col.charAt(0).toUpperCase() + col.slice(1)} {getSortIcon(col)}
+                    </th>
+                  ))}
                   <th className="px-6 py-3 text-center">Actions</th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {currentStudents.map((student) => (
-                  <tr
-                    key={student.name}
-                    className="hover:bg-gray-50 transition"
-                  >
-                    <td className="px-6 py-4">{student.rollNumber}</td>
-                    <td className="px-6 py-4">{student.name}</td>
-                    <td className="px-6 py-4">{student.className}</td>
-                    <td className="px-6 py-4">{student.contact}</td>
+                {currentStudents.map((s) => (
+                  <tr key={s.id || s.rollNumber} className="hover:bg-gray-50">
+                    <td className="px-6 py-4">{s.rollNumber}</td>
+                    <td className="px-6 py-4">{s.name}</td>
+                    <td className="px-6 py-4">{s.class || s.className}</td>
+                    <td className="px-6 py-4">{s.contact}</td>
                     <td className="px-6 py-4 flex justify-center space-x-4">
-                      {/* <button className="text-blue-600 hover:text-blue-800">
+                      <button onClick={() => openEditModal(s)} className="text-blue-600 hover:text-blue-800">
                         <Pencil size={18} />
-                      </button> */}
-                      <button
-                        className="text-red-600 hover:text-red-800"
-                        onClick={() => handleDelete(student.id)}
-                      >
+                      </button>
+                      <button onClick={() => handleDelete(s.id)} className="text-red-600 hover:text-red-800">
                         <Trash2 size={18} />
                       </button>
                     </td>
@@ -618,17 +403,87 @@ const Students = () => {
                 ))}
               </tbody>
             </table>
-
             {currentStudents.length === 0 && (
-              <p className="text-center text-gray-500 py-4">
-                No students found.
-              </p>
+              <p className="text-center text-gray-500 py-4">No students found.</p>
             )}
           </div>
+
+          {/* Pagination */}
+          <div className="mt-4 flex justify-center items-center space-x-4">
+            <button
+              disabled={currentPage === 1}
+              onClick={() => setCurrentPage((prev) => prev - 1)}
+              className="px-3 py-1 bg-blue-500 text-white rounded disabled:opacity-50"
+            >
+              Prev
+            </button>
+            <span>
+              Page {currentPage} of {totalPages}
+            </span>
+            <button
+              disabled={currentPage === totalPages}
+              onClick={() => setCurrentPage((prev) => prev + 1)}
+              className="px-3 py-1 bg-blue-500 text-white rounded disabled:opacity-50"
+            >
+              Next
+            </button>
+          </div>
         </>
+      )}
+
+      {/* Edit Modal */}
+      {editStudent && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded shadow-md w-full max-w-md space-y-4">
+            <h2 className="text-xl font-semibold">Edit Student</h2>
+            <input
+              type="text"
+              placeholder="Name"
+              value={editForm.name}
+              onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
+              className="w-full px-4 py-2 border rounded"
+            />
+            <input
+              type="text"
+              placeholder="Roll Number"
+              value={editForm.rollNumber}
+              onChange={(e) => setEditForm({ ...editForm, rollNumber: e.target.value })}
+              className="w-full px-4 py-2 border rounded"
+            />
+            <input
+              type="text"
+              placeholder="Class"
+              value={editForm.class}
+              onChange={(e) => setEditForm({ ...editForm, class: e.target.value })}
+              className="w-full px-4 py-2 border rounded"
+            />
+            <input
+              type="text"
+              placeholder="Contact"
+              value={editForm.contact}
+              onChange={(e) => setEditForm({ ...editForm, contact: e.target.value })}
+              className="w-full px-4 py-2 border rounded"
+            />
+            <div className="flex justify-end space-x-4">
+              <button
+                onClick={() => setEditStudent(null)}
+                className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleUpdate}
+                disabled={updating}
+                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+              >
+                {updating ? "Updating..." : "Update"}
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
 };
 
-export default Students;
+export default AStudents;

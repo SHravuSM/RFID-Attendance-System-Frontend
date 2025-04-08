@@ -1,18 +1,41 @@
-// import { useState } from "react";
-// import { Pencil, Trash2 } from "lucide-react";
+// import { useState, useEffect } from "react";
+// import { Trash2 } from "lucide-react";
+// import api from "../../api";
 
-// const fakeSchools = [
-//   { id: 1, name: "Green Valley High", address: "Delhi", principal: "Mr. Suresh" },
-//   { id: 2, name: "Sunshine Public", address: "Mumbai", principal: "Ms. Anita" },
-//   { id: 3, name: "Blue Bells Academy", address: "Bangalore", principal: "Mr. Raj" },
-// ];
-
-// const Schools = () => {
-//   const [schools, setSchools] = useState(fakeSchools);
+// const ASchools = () => {
+//   const [schools, setSchools] = useState([]);
 //   const [search, setSearch] = useState("");
 //   const [currentPage, setCurrentPage] = useState(1);
 //   const schoolsPerPage = 5;
 
+//   // Fetch schools
+//   useEffect(() => {
+//     const fetchSchools = async () => {
+//       try {
+//         const response = await api.get("/admin/institutions"); // Base URL is already set
+//         console.log("Fetched schools:", response.data);
+//         setSchools(response.data);
+//       } catch (error) {
+//         console.error("Error fetching schools:", error);
+//       }
+//     };
+//     fetchSchools();
+//   }, []);
+
+//   // Delete a school
+//   const handleDelete = async (id) => {
+//     const confirmed = window.confirm("Are you sure to delete this school?");
+//     if (!confirmed) return;
+
+//     try {
+//       await api.delete(`/admin/institutions/${id}`);
+//       setSchools((prev) => prev.filter((school) => school._id !== id));
+//     } catch (error) {
+//       console.error("Error deleting school:", error);
+//     }
+//   };
+
+//   // Search & Pagination
 //   const filtered = schools.filter((school) =>
 //     school.name.toLowerCase().includes(search.toLowerCase())
 //   );
@@ -21,13 +44,6 @@
 //   const indexOfFirst = indexOfLast - schoolsPerPage;
 //   const currentSchools = filtered.slice(indexOfFirst, indexOfLast);
 //   const totalPages = Math.ceil(filtered.length / schoolsPerPage);
-
-//   const handleDelete = (id) => {
-//     const confirmed = window.confirm("Are you sure to delete this school?");
-//     if (confirmed) {
-//       setSchools(schools.filter((school) => school.id !== id));
-//     }
-//   };
 
 //   return (
 //     <div className="p-8">
@@ -48,25 +64,42 @@
 //         <table className="min-w-full divide-y divide-gray-200">
 //           <thead className="bg-gray-50">
 //             <tr>
-//               <th className="px-6 py-3 text-left text-sm text-gray-700">Name</th>
-//               <th className="px-6 py-3 text-left text-sm text-gray-700">Address</th>
-//               <th className="px-6 py-3 text-left text-sm text-gray-700">Principal</th>
-//               <th className="px-6 py-3 text-center text-sm text-gray-700">Actions</th>
+//               <th className="px-6 py-3 text-left text-sm text-gray-700">
+//                 Name
+//               </th>
+//               <th className="px-6 py-3 text-left text-sm text-gray-700">
+//                 Address
+//               </th>
+//               <th className="px-6 py-3 text-left text-sm text-gray-700">
+//                 Principal
+//               </th>
+//               <th className="px-6 py-3 text-left text-sm text-gray-700">
+//                 Email
+//               </th>
+//               <th className="px-6 py-3 text-center text-sm text-gray-700">
+//                 Actions
+//               </th>
 //             </tr>
 //           </thead>
 //           <tbody className="bg-white divide-y divide-gray-200">
 //             {currentSchools.map((school) => (
-//               <tr key={school.id} className="hover:bg-gray-50">
-//                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{school.name}</td>
-//                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{school.address}</td>
-//                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{school.principal}</td>
+//               <tr key={school._id} className="hover:bg-gray-50">
+//                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
+//                   {school.name}
+//                 </td>
+//                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
+//                   {school.address}
+//                 </td>
+//                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
+//                   {school.principal}
+//                 </td>
+//                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
+//                   {school.email}
+//                 </td>
 //                 <td className="px-6 py-4 flex justify-center space-x-4">
-//                   <button className="text-blue-600 hover:text-blue-800">
-//                     <Pencil size={18} />
-//                   </button>
 //                   <button
 //                     className="text-red-600 hover:text-red-800"
-//                     onClick={() => handleDelete(school.id)}
+//                     onClick={() => handleDelete(school._id)}
 //                   >
 //                     <Trash2 size={18} />
 //                   </button>
@@ -81,7 +114,9 @@
 //       </div>
 
 //       <div className="flex justify-between items-center mt-6">
-//         <p className="text-sm text-gray-600">Page {currentPage} of {totalPages}</p>
+//         <p className="text-sm text-gray-600">
+//           Page {currentPage} of {totalPages}
+//         </p>
 //         <div className="flex space-x-2">
 //           <button
 //             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
@@ -91,7 +126,9 @@
 //             Prev
 //           </button>
 //           <button
-//             onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+//             onClick={() =>
+//               setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+//             }
 //             disabled={currentPage === totalPages}
 //             className="px-3 py-1 border rounded disabled:opacity-50"
 //           >
@@ -103,23 +140,25 @@
 //   );
 // };
 
-// export default Schools;
+// export default ASchools;
+
 
 import { useState, useEffect } from "react";
-import { Pencil, Trash2 } from "lucide-react";
-import axios from "axios";
+import { Trash2 } from "lucide-react";
+import api from "../../api";
 
-const Schools = () => {
+const ASchools = () => {
   const [schools, setSchools] = useState([]);
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const schoolsPerPage = 5;
 
-  // Fetch schools from the backend
+  // Fetch schools
   useEffect(() => {
     const fetchSchools = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/schools");
+        const response = await api.get("/admin/institutions"); // Base URL is already set
+        console.log("Fetched schools:", response.data);
         setSchools(response.data);
       } catch (error) {
         console.error("Error fetching schools:", error);
@@ -128,28 +167,28 @@ const Schools = () => {
     fetchSchools();
   }, []);
 
-  // Delete school
+  // Delete a school
   const handleDelete = async (id) => {
     const confirmed = window.confirm("Are you sure to delete this school?");
-    if (confirmed) {
-      try {
-        await axios.delete(`http://localhost:3000/api/schools/${id}`);
-        setSchools(schools.filter((school) => school._id !== id));
-      } catch (error) {
-        console.error("Error deleting school:", error);
-      }
+    if (!confirmed) return;
+
+    try {
+      await api.delete(`/admin/institutions/${id}`);
+      setSchools((prev) => prev.filter((school) => school._id !== id));
+    } catch (error) {
+      console.error("Error deleting school:", error);
     }
   };
 
-  // Filter schools based on search
+  // Search & Pagination (with fix)
   const filtered = schools.filter((school) =>
-    school.name.toLowerCase().includes(search.toLowerCase())
+    (school.name || "").toLowerCase().includes(search.toLowerCase())
   );
 
   const indexOfLast = currentPage * schoolsPerPage;
   const indexOfFirst = indexOfLast - schoolsPerPage;
   const currentSchools = filtered.slice(indexOfFirst, indexOfLast);
-  const totalPages = Math.ceil(filtered.length / schoolsPerPage);
+  const totalPages = Math.max(Math.ceil(filtered.length / schoolsPerPage), 1);
 
   return (
     <div className="p-8">
@@ -170,42 +209,29 @@ const Schools = () => {
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-3 text-left text-sm text-gray-700">
-                Name
-              </th>
-              <th className="px-6 py-3 text-left text-sm text-gray-700">
-                Address
-              </th>
-              <th className="px-6 py-3 text-left text-sm text-gray-700">
-                Principal
-              </th>
-              <th className="px-6 py-3 text-left text-sm text-gray-700">
-                Email
-              </th>
-              <th className="px-6 py-3 text-center text-sm text-gray-700">
-                Actions
-              </th>
+              <th className="px-6 py-3 text-left text-sm text-gray-700">Name</th>
+              <th className="px-6 py-3 text-left text-sm text-gray-700">Address</th>
+              <th className="px-6 py-3 text-left text-sm text-gray-700">Principal</th>
+              <th className="px-6 py-3 text-left text-sm text-gray-700">Email</th>
+              <th className="px-6 py-3 text-center text-sm text-gray-700">Actions</th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {currentSchools.map((school) => (
               <tr key={school._id} className="hover:bg-gray-50">
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                  {school.name}
+                  {school.institutionName || "N/A"}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                  {school.address}
+                  {school.address || "N/A"}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                  {school.principal}
+                  {school.principalName || "N/A"}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                  {school.email}
+                  {school.email || "N/A"}
                 </td>
                 <td className="px-6 py-4 flex justify-center space-x-4">
-                  {/* <button className="text-blue-600 hover:text-blue-800">
-                    <Pencil size={18} />
-                  </button> */}
                   <button
                     className="text-red-600 hover:text-red-800"
                     onClick={() => handleDelete(school._id)}
@@ -249,4 +275,4 @@ const Schools = () => {
   );
 };
 
-export default Schools;
+export default ASchools;

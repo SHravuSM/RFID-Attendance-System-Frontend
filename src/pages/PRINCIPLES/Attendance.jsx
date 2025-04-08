@@ -47,7 +47,7 @@ const fakeAttendance = [
   },
 ];
 
-const Attendance = () => {
+const IAttendance = () => {
   const [attendanceRecords, setAttendanceRecords] = useState([]);
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState("All");
@@ -408,4 +408,4 @@ const Attendance = () => {
   );
 };
 
-export default Attendance;
+export default IAttendance;

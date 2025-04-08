@@ -1,121 +1,3 @@
-// import {
-//   Users,
-//   User,
-//   BookOpen,
-//   CalendarDays,
-//   AlertCircle,
-//   PlusCircle,
-//   FileDown,
-//   Bell,
-//   TrendingUp,
-// } from "lucide-react";
-
-// const SubHomeWelcome = () => {
-//   const today = new Date().toLocaleDateString("en-GB", {
-//     weekday: "long",
-//     year: "numeric",
-//     month: "short",
-//     day: "numeric",
-//   });
-
-//   return (
-//     <div className="space-y-8">
-//       {/* Welcome Banner */}
-//       <div className="bg-gradient-to-r from-blue-500 to-blue-700 p-6 rounded-xl text-white shadow-md flex flex-col md:flex-row justify-between items-center">
-//         <div>
-//           <h2 className="text-2xl font-bold mb-2">Welcome back, Principal 👋</h2>
-//           <p className="text-sm text-blue-100">Your school's dashboard overview - {today}</p>
-//         </div>
-//         <div className="mt-4 md:mt-0 flex gap-3">
-//           <button className="flex items-center gap-2 bg-white text-blue-700 px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition">
-//             <PlusCircle size={16} /> Add Student
-//           </button>
-//           <button className="flex items-center gap-2 bg-white text-blue-700 px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition">
-//             <FileDown size={16} /> Download Report
-//           </button>
-//         </div>
-//       </div>
-
-//       {/* Quick Stats */}
-//       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-//         {[
-//           { label: "Students", value: "523", icon: Users, color: "bg-blue-100 text-blue-700" },
-//           { label: "Teachers", value: "27", icon: User, color: "bg-green-100 text-green-700" },
-//           { label: "Classes", value: "14", icon: BookOpen, color: "bg-purple-100 text-purple-700" },
-//           { label: "Attendance Today", value: "92%", icon: TrendingUp, color: "bg-yellow-100 text-yellow-700" },
-//         ].map((stat, idx) => (
-//           <div
-//             key={idx}
-//             className="bg-white p-5 rounded-xl shadow-sm border border-gray-200 flex items-center gap-4 hover:shadow-md transition"
-//           >
-//             <div className={`p-3 rounded-full ${stat.color}`}>
-//               <stat.icon size={24} />
-//             </div>
-//             <div>
-//               <p className="text-gray-500 text-sm">{stat.label}</p>
-//               <h3 className="text-2xl font-bold text-gray-800">{stat.value}</h3>
-//             </div>
-//           </div>
-//         ))}
-//       </div>
-
-//       {/* Alerts & Notifications */}
-//       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-//         <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-//           <div className="flex items-center gap-2 mb-4">
-//             <AlertCircle size={20} className="text-red-500" />
-//             <h3 className="text-lg font-semibold text-red-600">Urgent Alerts</h3>
-//           </div>
-//           <ul className="space-y-3 text-gray-700 text-sm">
-//             <li className="flex justify-between">
-//               3 students absent for 3+ days
-//               <span className="text-blue-600 cursor-pointer hover:underline">View</span>
-//             </li>
-//             <li className="flex justify-between">
-//               Attendance pending for Class 9-B
-//               <span className="text-blue-600 cursor-pointer hover:underline">Mark Now</span>
-//             </li>
-//             <li className="flex justify-between">
-//               New teacher verification pending
-//               <span className="text-blue-600 cursor-pointer hover:underline">Review</span>
-//             </li>
-//           </ul>
-//         </div>
-
-//         {/* Recent Activity */}
-//         <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-//           <div className="flex items-center gap-2 mb-4">
-//             <Bell size={20} className="text-yellow-500" />
-//             <h3 className="text-lg font-semibold text-gray-800">Recent Activities</h3>
-//           </div>
-//           <ul className="space-y-3 text-gray-700 text-sm">
-//             <li>✅ Attendance marked for Class 10-A at 9:05 AM</li>
-//             <li>➕ New teacher "Mrs. Rani" added yesterday</li>
-//             <li>🔄 Class timings updated for Class 6-B</li>
-//           </ul>
-//         </div>
-//       </div>
-
-//       {/* Upcoming Events */}
-//       <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-//         <h3 className="text-lg font-semibold text-gray-800 mb-4">📅 Upcoming Events</h3>
-//         <ul className="space-y-3 text-gray-700 text-sm">
-//           <li className="flex justify-between">
-//             <span>📌 Parent-Teacher Meeting - 2nd April</span>
-//             <span className="text-blue-600 cursor-pointer hover:underline">View Details</span>
-//           </li>
-//           <li className="flex justify-between">
-//             <span>📌 Annual Sports Day - 20th April</span>
-//             <span className="text-blue-600 cursor-pointer hover:underline">View Details</span>
-//           </li>
-//         </ul>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default SubHomeWelcome;
-
 import {
   Users,
   User,
@@ -128,8 +10,11 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import api from "../../api";
 
-const SubHomeWelcome = () => {
+const IHome = () => {
+  const [data, setData] = useState({});
   const today = new Date().toLocaleDateString("en-GB", {
     weekday: "long",
     year: "numeric",
@@ -137,28 +22,48 @@ const SubHomeWelcome = () => {
     day: "numeric",
   });
 
+  const fetchClasses = async () => {
+    try {
+      const res = await api.get("/institution/institutions/home");
+      // {
+      //   totalStudents,
+      //   totalTeachers,
+      //   totalClasses,
+      //   attendancePercentage,
+      // } = res.data
+      console.log(typeof res.data, res.data);
+      setData(res.data);
+    } catch (err) {
+      console.error("Error fetching classes:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchClasses();
+  }, []);
+
   const stats = [
     {
       label: "Students",
-      value: "523",
+      value: data.totalStudents,
       icon: Users,
       color: "bg-blue-100 text-blue-700",
     },
     {
       label: "Teachers",
-      value: "27",
+      value: data.totalTeachers,
       icon: User,
       color: "bg-green-100 text-green-700",
     },
     {
       label: "Classes",
-      value: "14",
+      value: data.totalClasses,
       icon: BookOpen,
       color: "bg-purple-100 text-purple-700",
     },
     {
       label: "Attendance Today",
-      value: "92%",
+      value: data.attendancePercentage,
       icon: TrendingUp,
       color: "bg-yellow-100 text-yellow-700",
     },
@@ -192,7 +97,9 @@ const SubHomeWelcome = () => {
       >
         <div>
           <h2 className="text-2xl font-bold mb-2">
-            Welcome back, Principal 👋
+            {data.institutionName}
+            <br />
+            {/* Welcome back, Principal 👋 */}
           </h2>
           <p className="text-sm text-blue-100">
             Your school's dashboard overview - {today}
@@ -200,7 +107,7 @@ const SubHomeWelcome = () => {
         </div>
         <div className="mt-4 md:mt-0 flex gap-3">
           <Link
-            to="/subhome/add-student"
+            to="rfiddevice"
             className="flex items-center gap-2 bg-white text-blue-700 px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition"
           >
             <PlusCircle size={16} /> Add New Card
@@ -305,4 +212,4 @@ const SubHomeWelcome = () => {
   );
 };
 
-export default SubHomeWelcome;
+export default IHome;

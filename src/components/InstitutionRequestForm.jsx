@@ -32,7 +32,7 @@
 //     setStatusMessage("");
 
 //     try {
-//       const response = await fetch("http://localhost:3000/api/institution-request", {
+//       const response = await fetch("API_URL/api/institution-request", {
 //         method: "POST",
 //         headers: { "Content-Type": "application/json" },
 //         body: JSON.stringify(formData),
@@ -146,7 +146,9 @@ const InstitutionRequestForm = ({ id }) => {
 
     try {
       const response = await fetch(
-        "http://localhost:3000/api/institution-request",
+        `${
+          import.meta.env.VITE_API_URL
+        }/institution-request`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

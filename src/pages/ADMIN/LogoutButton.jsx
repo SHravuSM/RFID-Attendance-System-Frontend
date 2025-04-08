@@ -1,18 +1,11 @@
 import { LogOut } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 const LogoutButton = () => {
-  const navigate = useNavigate();
+  const { logout } = useAuth();
 
   const handleLogout = () => {
-    // Clear tokens or any sensitive data
-    localStorage.clear();
-    sessionStorage.clear();
-
-    // Navigate to home and remove history stack
-    navigate("/", { replace: true });
-    // window.location.reload();
-    // window.close();
+    logout();
   };
 
   return (

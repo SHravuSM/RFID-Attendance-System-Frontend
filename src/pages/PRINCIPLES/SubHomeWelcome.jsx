@@ -127,7 +127,7 @@ import {
   Bell,
 } from "lucide-react";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link } from "react-router-dom"
 
 const SubHomeWelcome = () => {
   const today = new Date().toLocaleDateString("en-GB", {

@@ -30,7 +30,12 @@ export default function Footer() {
         {/* Brand Info */}
         <div>
           <h2 className="text-2xl  font-bold text-white mb-2">
-            RFID Attendance
+            <span className="font-sans text-red-600">Shant</span>
+            <span className="mr-1"></span>
+            <span className="text-white">Shiv</span>{" "}
+            <span className="text-blue-500">Technologies</span>
+            <br />
+            <p className="text-lg text-slate-400">RFID Attendance</p>
           </h2>
           <p className="text-sm font-sans leading-relaxed text-gray-400">
             Simplifying attendance management for Schools, Colleges &
@@ -46,14 +51,16 @@ export default function Footer() {
           <h3 className="text-lg space-y-2 font-semibold text-white mb-1">
             Contact
           </h3>
-          <p className="text-sm text-gray-400 mb-2">support@Verity.com</p>
-          <p className="text-sm text-gray-400">+91 9019206067</p>
+          <p className="text-sm text-gray-400 mb-2">
+            www.support@shantshiv.com
+          </p>
+          <p className="text-sm text-gray-400">+91 7411361004</p>
         </div>
       </div>
 
       {/* Bottom */}
       <div className="mt-4 border-t border-gray-700 pt-4 text-center text-sm text-gray-500">
-        © {new Date().getFullYear()} RFID Attendance. All rights reserved.
+        © {new Date().getFullYear()} ShantShiv. All rights reserved.
       </div>
     </footer>
   );

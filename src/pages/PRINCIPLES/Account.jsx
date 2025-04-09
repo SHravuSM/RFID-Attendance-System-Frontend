@@ -1,73 +1,15 @@
-// import React from "react";
-// import { LogOut, Settings, Mail, User, School } from "lucide-react";
-
-// export default function IAccount() {
-//   const user = {
-//     name: "Mr. Aravind Kumar",
-//     email: "aravind.kumar@school.edu",
-//     role: "Principal",
-//     school: "Green Valley Public School",
-//   };
-
-//   function changePassword(params) {
-
-//   }
-
-//   return (
-//     <div className="max-w-3xl mx-auto p-6 space-y-8">
-//       {/* Header */}
-//       <div className="flex items-center gap-4">
-//         <div className="w-20 h-20 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-3xl font-bold">
-//           {user.name[0]}
-//         </div>
-//         <div>
-//           <h2 className="text-2xl font-bold text-gray-800">{user.name}</h2>
-//           <p className="text-gray-500 text-sm">{user.role}</p>
-//         </div>
-//       </div>
-
-//       {/* Details */}
-//       <div className="bg-white p-6 rounded-xl shadow-sm border space-y-4">
-//         <div className="flex items-center gap-3">
-//           <Mail className="text-blue-500" size={18} />
-//           <p className="text-gray-700 text-sm">{user.email}</p>
-//         </div>
-//         <div className="flex items-center gap-3">
-//           <User className="text-green-500" size={18} />
-//           <p className="text-gray-700 text-sm">Role: {user.role}</p>
-//         </div>
-//         <div className="flex items-center gap-3">
-//           <School className="text-purple-500" size={18} />
-//           <p className="text-gray-700 text-sm">School: {user.school}</p>
-//         </div>
-//       </div>
-
-//       {/* Actions */}
-//       <div className="flex flex-col md:flex-row gap-4">
-//         <button
-//           onClick={changePassword}
-//           className="flex items-center gap-2 bg-blue-600 text-white px-5 py-2 rounded-lg shadow hover:bg-blue-700 transition"
-//         >
-//           <Settings size={18} /> Change Password
-//         </button>
-//         <button className="flex items-center gap-2 bg-red-100 text-red-600 px-5 py-2 rounded-lg border hover:bg-red-200 transition">
-//           <LogOut size={18} /> Logout
-//         </button>
-//       </div>
-//     </div>
-//   );
-// }
-
 import React, { useState } from "react";
 import { LogOut, Settings, Mail, User, School } from "lucide-react";
 import api from "../../api";
+import { useAuth } from "../../context/AuthContext";
+import { data } from "react-router-dom";
 
 export default function IAccount() {
   const user = {
-    name: "Mr. Aravind Kumar",
-    email: "aravind.kumar@school.edu",
+    name: `Mr. ${data.principalName}`,
+    email: data.email,
     role: "Principal",
-    school: "Green Valley Public School",
+    institution: data.institutionName,
   };
 
   const [showModal, setShowModal] = useState(false);
@@ -75,6 +17,7 @@ export default function IAccount() {
   const [newPassword, setNewPassword] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  { data } = useAuth();
   const [loading, setLoading] = useState(false);
 
   async function changePassword() {
@@ -101,7 +44,7 @@ export default function IAccount() {
         setShowModal(false);
         setCurrentPassword("");
         setNewPassword("");
-        setMessage("")
+        setMessage("");
       }, 2000);
     } catch (err) {
       const msg = err.response?.data?.error || "Failed to change password.";
@@ -137,7 +80,7 @@ export default function IAccount() {
         </div>
         <div className="flex items-center gap-3">
           <School className="text-purple-500" size={18} />
-          <p className="text-gray-700 text-sm">School: {user.school}</p>
+          <p className="text-gray-700 text-sm">institution: {user.institution}</p>
         </div>
       </div>
 

@@ -1,49 +1,3 @@
-// // AuthContext.jsx
-// import { createContext, useContext, useState } from "react";
-// import { useNavigate } from "react-router-dom";
-// import api from "../api.js";
-
-// const AuthContext = createContext();
-
-// export const AuthProvider = ({ children }) => {
-//   const [user, setUser] = useState(null);
-//   const navigate = useNavigate();
-
-//   const login = async (Id, password) => {
-//     try {
-//       const res = await api.post(`${import.meta.env.VITE_API_URL}/login`, {
-//         Id,
-//         password,
-//       });
-
-//       const data = res.data; // Axios automatically parses JSON response
-//       console.log(data);
-
-//       if (!res.status || res.status !== 200) {
-//         throw new Error(data.message || "Login failed");
-//       }
-
-//       localStorage.setItem("token", data.token);
-//       localStorage.setItem("role", data.role);
-//       setUser({ Id, role: data.role });
-
-//       return data.role;
-//     } catch (error) {
-//       console.error("Login error:", error);
-//       throw error; // rethrow for higher-level handling
-//     }
-//   };
-
-//   return (
-//     <AuthContext.Provider value={{ user, login }}>
-//       {children}
-//     </AuthContext.Provider>
-//   );
-// };
-
-// export const useAuth = () => useContext(AuthContext);
-
-// AuthContext.jsx
 import { createContext, useContext, useEffect, useState } from "react";
 import api from "../api.js";
 import { jwtDecode } from "jwt-decode";
@@ -52,6 +6,7 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [data, setData] = useState({});
   const [authReady, setAuthReady] = useState(false); // 🚀 NEW
 
   useEffect(() => {
@@ -69,6 +24,22 @@ export const AuthProvider = ({ children }) => {
 
     setAuthReady(true); // ✅ Tell the app that auth check is done
   }, []);
+
+  const fetchClasses = async () => {
+    try {
+      const res = await api.get("/institution/institutions/home");
+      // {
+      //   totalStudents,
+      //   totalTeachers,
+      //   totalClasses,
+      //   attendancePercentage,
+      // } = res.data
+      console.log(typeof res.data, res.data);
+      setData(res.data);
+    } catch (err) {
+      console.error("Error fetching classes:", err);
+    }
+  };
 
   const login = async (Id, password) => {
     try {
@@ -107,7 +78,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, authReady }}>
+    <AuthContext.Provider
+      value={{ user, login, data, logout, authReady, fetchClasses }}
+    >
       {children}
     </AuthContext.Provider>
   );

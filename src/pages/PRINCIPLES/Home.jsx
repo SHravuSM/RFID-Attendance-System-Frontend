@@ -10,33 +10,18 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import api from "../../api";
+import { useAuth } from "../../context/AuthContext";
 
 const IHome = () => {
-  const [data, setData] = useState({});
+  const { data, fetchClasses } = useAuth();
   const today = new Date().toLocaleDateString("en-GB", {
     weekday: "long",
     year: "numeric",
     month: "short",
     day: "numeric",
   });
-
-  const fetchClasses = async () => {
-    try {
-      const res = await api.get("/institution/institutions/home");
-      // {
-      //   totalStudents,
-      //   totalTeachers,
-      //   totalClasses,
-      //   attendancePercentage,
-      // } = res.data
-      console.log(typeof res.data, res.data);
-      setData(res.data);
-    } catch (err) {
-      console.error("Error fetching classes:", err);
-    }
-  };
 
   useEffect(() => {
     fetchClasses();

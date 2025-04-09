@@ -62,7 +62,7 @@ const App = () => {
         }
       >
         <Route index element={<AHome />} />
-        <Route path="schools" element={<ASchools />} />
+        <Route path="institutions" element={<ASchools />} />
         <Route path="students" element={<AStudents />} />
         <Route path="teachers" element={<ATeachers />} />
         <Route path="assign-device" element={<AssignDevice />} />

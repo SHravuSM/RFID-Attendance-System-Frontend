@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { LogOut, Settings, Mail, User, School } from "lucide-react";
 import api from "../../api";
 import { useAuth } from "../../context/AuthContext";
+import { data } from "react-router-dom";
 
 export default function IAccount() {
   const { data } = useAuth();

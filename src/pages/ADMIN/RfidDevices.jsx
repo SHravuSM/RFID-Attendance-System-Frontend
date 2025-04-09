@@ -1,16 +1,14 @@
-import { useState, useMemo } from "react";
-import { Pencil, Trash2 } from "lucide-react";
-
-const fakeDevices = [
-  { id: "RFID001", school: "Green Valley High", status: "Active" },
-  { id: "RFID002", school: "Sunshine Public", status: "Inactive" },
-  { id: "RFID003", school: "Blue Bells Academy", status: "Active" },
-];
+import { useEffect, useState, useMemo } from "react";
+import { Pencil, PlusCircle, PlusCircleIcon, Trash2 } from "lucide-react";
+import api from "../../api";
+import { NavLink } from "react-router-dom";
 
 const DeviceRow = ({ device, onDelete, onToggleStatus }) => (
   <tr key={device.id} className="hover:bg-gray-50">
     <td className="px-6 py-4 text-sm text-gray-800">{device.id}</td>
-    <td className="px-6 py-4 text-sm text-gray-800">{device.school}</td>
+    <td className="px-6 py-4 text-sm text-gray-800">
+      {device.institutionName}
+    </td>
     <td className="px-6 py-4 text-sm text-gray-800">
       <span
         className={`px-2 py-1 rounded-full text-xs ${
@@ -24,15 +22,6 @@ const DeviceRow = ({ device, onDelete, onToggleStatus }) => (
     </td>
     <td className="px-6 py-4 flex justify-center space-x-4">
       <button
-        className="text-green-600 hover:text-green-800 text-xs"
-        onClick={() => onToggleStatus(device.id)}
-      >
-        Toggle Status
-      </button>
-      <button className="text-blue-600 hover:text-blue-800">
-        <Pencil size={18} />
-      </button>
-      <button
         className="text-red-600 hover:text-red-800"
         onClick={() => onDelete(device.id)}
       >
@@ -43,10 +32,58 @@ const DeviceRow = ({ device, onDelete, onToggleStatus }) => (
 );
 
 const ARfidDevices = () => {
-  const [devices, setDevices] = useState(fakeDevices);
+  const [devices, setDevices] = useState([]);
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   const devicesPerPage = 5;
+
+  useEffect(() => {
+    const fetchDevices = async () => {
+      try {
+        const res = await api.get("/admin/rfiddevices");
+        setDevices(res.data);
+        setLoading(false);
+      } catch (err) {
+        console.error("Error fetching devices:", err);
+        setError("Failed to load devices.");
+        setLoading(false);
+      }
+    };
+
+    fetchDevices();
+  }, []);
+
+  const handleDelete = async (deviceId) => {
+    const confirm = window.confirm("Are you sure you want to delete?");
+    if (!confirm) return;
+
+    try {
+      console.log("Hi");
+      const res = await api.delete(`/admin/rfiddevices/${deviceId}`);
+      setDevices((prev) => prev.filter((d) => d.id !== deviceId));
+      alert(res.data.message);
+    } catch (err) {
+      console.error("Error deleting device:", err);
+      alert("Failed to delete device.");
+    }
+  };
+
+  const handleToggleStatus = (id) => {
+    setDevices((prev) =>
+      prev.map((d) =>
+        d.id === id
+          ? {
+              ...d,
+              status: d.status === "Active" ? "Inactive" : "Active",
+            }
+          : d
+      )
+    );
+    // Optionally: send status update to backend
+  };
 
   const filteredDevices = useMemo(() => {
     return devices.filter((d) =>
@@ -60,39 +97,38 @@ const ARfidDevices = () => {
     return filteredDevices.slice(start, start + devicesPerPage);
   }, [currentPage, filteredDevices]);
 
-  const handleDelete = (id) => {
-    const confirm = window.confirm("Are you sure you want to delete?");
-    if (confirm) {
-      setDevices((prev) => prev.filter((d) => d.id !== id));
-    }
-  };
+  if (loading) {
+    return <div className="p-8 text-gray-600">Loading devices...</div>;
+  }
 
-  const handleToggleStatus = (id) => {
-    setDevices((prev) =>
-      prev.map((d) =>
-        d.id === id
-          ? { ...d, status: d.status === "Active" ? "Inactive" : "Active" }
-          : d
-      )
-    );
-  };
+  if (error) {
+    return <div className="p-8 text-red-500">{error}</div>;
+  }
 
   return (
     <div className="p-8">
       <h1 className="text-2xl font-semibold mb-6 text-gray-800">
         RFID Devices
       </h1>
+      <div className="flex items-start justify-between">
+        <input
+          type="text"
+          placeholder="Search by Device ID"
+          value={search}
+          onChange={(e) => {
+            setSearch(e.target.value);
+            setCurrentPage(1);
+          }}
+          className="w-full md:w-1/3 px-4 py-2 border rounded mb-4"
+        />
 
-      <input
-        type="text"
-        placeholder="Search by Device ID"
-        value={search}
-        onChange={(e) => {
-          setSearch(e.target.value);
-          setCurrentPage(1);
-        }}
-        className="w-full md:w-1/3 px-4 py-2 border rounded mb-4"
-      />
+        <NavLink
+          to="/ADMIN/assign-device"
+          className="flex items-center gap-2 h-10 bg-white text-indigo-700 px-4 rounded-lg font-medium hover:bg-gray-100 transition"
+        >
+          <PlusCircleIcon size={16} /> Assign Device
+        </NavLink>
+      </div>
 
       <div className="overflow-x-auto bg-white shadow rounded-lg">
         <table className="min-w-full divide-y divide-gray-200">
@@ -102,7 +138,7 @@ const ARfidDevices = () => {
                 Device ID
               </th>
               <th className="px-6 py-3 text-left text-sm text-gray-700">
-                School
+                Institution
               </th>
               <th className="px-6 py-3 text-left text-sm text-gray-700">
                 Status

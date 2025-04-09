@@ -1,60 +1,60 @@
-import React from "react";
-
-const fakeDevices = [
-  {
-    id: "RFID-001",
-    location: "Block A - Main Gate",
-    status: "Online",
-    lastSynced: "2025-03-28 10:15 AM",
-  },
-  {
-    id: "RFID-002",
-    location: "Block B - Class 10 Entrance",
-    status: "Offline",
-    lastSynced: "2025-03-27 06:45 PM",
-  },
-  {
-    id: "RFID-003",
-    location: "Block C - Library",
-    status: "Online",
-    lastSynced: "2025-03-28 09:50 AM",
-  },
-];
+import React, { useEffect, useState } from "react";
+import api from "../../api";
 
 const IDevices = () => {
+  const [devices, setDevices] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchDevices = async () => {
+    try {
+      const res = await api.get("/institution/rfid/devices");
+      const deviceIds = res.data.deviceIds;
+      setDevices(deviceIds);
+    } catch (error) {
+      console.error("Error fetching devices:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchDevices();
+  }, []);
+
   return (
-    <div>
-      <h2 className="text-2xl font-bold text-gray-800 mb-6">📡 Assigned RFID Devices</h2>
-      <div className="overflow-x-auto">
-        <table className="min-w-full bg-white border border-gray-200 rounded-xl shadow-sm">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700">Device ID</th>
-              <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700">Location</th>
-              {/* <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700">Status</th> */}
-              <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700">Last Synced</th>
-            </tr>
-          </thead>
-          <tbody>
-            {fakeDevices.map((device) => (
-              <tr key={device.id} className="border-t border-gray-200">
-                <td className="py-3 px-4 text-sm text-gray-800">{device.id}</td>
-                <td className="py-3 px-4 text-sm text-gray-600">{device.location}</td>
-                {/* <td className="py-3 px-4 text-sm"> */}
-                  {/* <span
-                    className={`px-3 py-1 rounded-full text-xs font-medium ${
-                      device.status === "Online" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
-                    }`}
-                  >
-                    {device.status}
-                  </span> */}
-                {/* </td> */}
-                <td className="py-3 px-4 text-sm text-gray-600">{device.lastSynced}</td>
+    <div className="px-2 md:px-8 py-6 w-full max-w-7xl mx-auto">
+      <h2 className="text-2xl font-bold mb-6 text-gray-800">
+        📡 Assigned RFID Devices
+      </h2>
+
+      {loading ? (
+        <p className="p-4 text-blue-500">Loading devices...</p>
+      ) : devices.length > 0 ? (
+        <div className="bg-white shadow rounded-lg w-full overflow-x-auto">
+          <table className="w-full table-auto text-sm md:text-base">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-4 py-3 text-left font-semibold text-gray-700 whitespace-nowrap">
+                  Device ID
+                </th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-100">
+              {devices.map((deviceId) => (
+                <tr key={deviceId} className="hover:bg-gray-50">
+                  <td className="px-4 py-3 text-gray-800 break-words whitespace-normal">
+                    {deviceId}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <p className="text-center py-6 text-gray-500">
+          No devices assigned to this institution.
+        </p>
+      )}
     </div>
   );
 };

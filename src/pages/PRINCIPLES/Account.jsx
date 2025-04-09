@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { LogOut, Settings, Mail, User, School } from "lucide-react";
 import api from "../../api";
 import { useAuth } from "../../context/AuthContext";
-import { data } from "react-router-dom";
 
 export default function IAccount() {
+  const { data } = useAuth();
   const user = {
     name: `Mr. ${data.principalName}`,
     email: data.email,
@@ -17,7 +17,6 @@ export default function IAccount() {
   const [newPassword, setNewPassword] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
-  { data } = useAuth();
   const [loading, setLoading] = useState(false);
 
   async function changePassword() {
@@ -80,7 +79,9 @@ export default function IAccount() {
         </div>
         <div className="flex items-center gap-3">
           <School className="text-purple-500" size={18} />
-          <p className="text-gray-700 text-sm">institution: {user.institution}</p>
+          <p className="text-gray-700 text-sm">
+            institution: {user.institution}
+          </p>
         </div>
       </div>
 

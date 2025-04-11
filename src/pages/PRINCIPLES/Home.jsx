@@ -7,12 +7,15 @@ import {
   PlusCircle,
   FileDown,
   Bell,
+  CheckCircle,
+  XCircle,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
-import api from "../../api";
+// import api from "../../api";
 import { useAuth } from "../../context/AuthContext";
+import Button from "./Subscribe";
 
 const IHome = () => {
   const { data, fetchClasses } = useAuth();
@@ -30,25 +33,27 @@ const IHome = () => {
   const stats = [
     {
       label: "Students",
-      value: data.totalStudents,
+      value:
+        data.subscriptionStatus !== "expired" ? data.totalStudents : "",
       icon: Users,
       color: "bg-blue-100 text-blue-700",
     },
     {
       label: "Teachers",
-      value: data.totalTeachers,
+      value: data.subscriptionStatus !== "expired" ? data.totalTeachers : "",
       icon: User,
       color: "bg-green-100 text-green-700",
     },
     {
       label: "Classes",
-      value: data.totalClasses,
+      value: data.subscriptionStatus !== "expired" ? data.totalClasses : "",
       icon: BookOpen,
       color: "bg-purple-100 text-purple-700",
     },
     {
       label: "Attendance Today",
-      value: data.attendancePercentage,
+      value:
+        data.subscriptionStatus !== "expired" ? data.attendancePercentage : "",
       icon: TrendingUp,
       color: "bg-yellow-100 text-yellow-700",
     },
@@ -81,26 +86,49 @@ const IHome = () => {
         className="bg-gradient-to-r from-blue-500 to-blue-700 p-6 rounded-xl text-white shadow-md flex flex-col md:flex-row justify-between items-center"
       >
         <div>
-          <h2 className="text-2xl font-bold mb-2">
+          <h2 className="text-2xl font-bold mb-2 flex items-center gap-2">
             {data.institutionName}
-            <br />
-            {/* Welcome back, Principal 👋 */}
+            {data.subscriptionStatus !== "expired" ? (
+              <span className="flex gap-3 items-center justify-center">
+                <motion.div
+                  initial={{ scale: 0.7, opacity: 0 }}
+                  animate={{ scale: 1.3, opacity: 1 }}
+                  transition={{ type: "spring", stiffness: 260, damping: 10 }}
+                >
+                  <CheckCircle
+                    size={24}
+                    className="ml-2 text-green-500"
+                    title="Subscription Active"
+                  />
+                </motion.div>
+                <span className="text-sm font-mono font-light">
+                  {data.subsctiptionEndsOn?.split(",").join(" -")}
+                </span>
+              </span>
+            ) : (
+              <span></span>
+            )}
           </h2>
+
           <p className="text-sm text-blue-100">
             Your school's dashboard overview - {today}
           </p>
         </div>
-        <div className="mt-4 md:mt-0 flex gap-3">
-          <Link
-            to="rfiddevice"
-            className="flex items-center gap-2 bg-white text-blue-700 px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition"
-          >
-            <PlusCircle size={16} /> Add New Card
-          </Link>
-          <button className="flex items-center gap-2 bg-white text-blue-700 px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition">
-            <FileDown size={16} /> Download Report
-          </button>
-        </div>
+        {data.subscriptionStatus == "expired" ? (
+          <Button />
+        ) : (
+          <div className="mt-4 md:mt-0 flex gap-3">
+            <Link
+              to="rfiddevice"
+              className="flex items-center gap-2 bg-white text-blue-700 px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition"
+            >
+              <PlusCircle size={16} /> Add New Card
+            </Link>
+            <button className="flex items-center gap-2 bg-white text-blue-700 px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition">
+              <FileDown size={16} /> Download Report
+            </button>
+          </div>
+        )}
       </motion.div>
 
       {/* Quick Stats */}

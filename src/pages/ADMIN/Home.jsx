@@ -159,7 +159,7 @@ const AHome = () => {
         ))}
       </div>
 
-      {/* Alerts & Notifications */}
+      {/* Alerts & Notifications
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
           <div className="flex items-center gap-2 mb-4">
@@ -181,7 +181,7 @@ const AHome = () => {
         </div>
 
         {/* Recent Activities */}
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+        {/* <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
           <div className="flex items-center gap-2 mb-4">
             <Bell size={20} className="text-yellow-500" />
             <h3 className="text-lg font-semibold text-gray-800">
@@ -194,7 +194,7 @@ const AHome = () => {
             ))}
           </ul>
         </div>
-      </div>
+      </div> */}
 
       {/* Upcoming Events */}
       <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">

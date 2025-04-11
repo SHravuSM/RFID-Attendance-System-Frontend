@@ -28,13 +28,14 @@ export const AuthProvider = ({ children }) => {
   const fetchClasses = async () => {
     try {
       const res = await api.get("/institution/institutions/home");
+      // console.log(res.data)
       // {
       //   totalStudents,
       //   totalTeachers,
       //   totalClasses,
       //   attendancePercentage,
       // } = res.data
-      console.log(typeof res.data, res.data);
+      // console.log(typeof res.data, res.data);
       setData(res.data);
     } catch (err) {
       console.error("Error fetching classes:", err);

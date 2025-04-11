@@ -61,7 +61,7 @@ const ARfidDevices = () => {
     if (!confirm) return;
 
     try {
-      console.log("Hi");
+      // console.log("Hi");
       const res = await api.delete(`/admin/rfiddevices/${deviceId}`);
       setDevices((prev) => prev.filter((d) => d.id !== deviceId));
       alert(res.data.message);

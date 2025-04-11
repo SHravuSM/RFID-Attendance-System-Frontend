@@ -259,14 +259,23 @@ const AServiceRequests = () => {
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-3 text-left text-sm text-gray-700">
-                School
+              <th className="px-6 py-3 text-center text-sm text-gray-700">
+                Institution
               </th>
-              <th className="px-6 py-3 text-left text-sm text-gray-700">
+              <th className="px-6 py-3 text-center text-sm text-gray-700">
                 Date
               </th>
-              <th className="px-6 py-3 text-left text-sm text-gray-700">
+              <th className="px-6 py-3 text-center text-sm text-gray-700">
+                Principal
+              </th>
+              <th className="px-6 py-3 text-center text-sm text-gray-700">
+                email
+              </th>
+              <th className="px-6 py-3 text-center text-sm text-gray-700">
                 Actions
+              </th>
+              <th className="px-6 py-3 text-center text-sm text-gray-700">
+                Contact
               </th>
             </tr>
           </thead>
@@ -279,6 +288,10 @@ const AServiceRequests = () => {
                 <td className="px-6 py-4 text-sm text-gray-800">
                   {new Date(r.createdAt).toLocaleDateString()}
                 </td>
+                <td className="px-6 py-4 text-sm text-gray-800">
+                  {r.principalName}
+                </td>
+                <td className="px-6 py-4 text-sm text-gray-800">{r.email}</td>
                 <td className="px-6 py-4 text-sm text-gray-800 flex space-x-2">
                   {!r.approved && (
                     <button
@@ -290,10 +303,13 @@ const AServiceRequests = () => {
                   )}
                   <button
                     onClick={() => deleteRequest(r._id)}
-                    className="px-3 py-1 text-white bg-red-500 rounded flex items-center"
+                    className="pl-2 pr-1 text-white bg-red-500 rounded flex items-center"
                   >
-                    <Trash2 size={16} className="mr-1" /> Delete
+                    <Trash2 size={18} className="mr-1" />
                   </button>
+                </td>
+                <td className="px-6 py-4 text-sm text-gray-800">
+                  {r.contactNumber}
                 </td>
               </tr>
             ))}

@@ -13,7 +13,7 @@ const RFIDDeviceSelector = () => {
       try {
         const res = await api.get(`/institution/rfid/devices`);
         const data = await res.data; // assuming axios — no need for .json()
-        console.log("RFID Devices:", data.deviceIds);
+        // console.log("RFID Devices:", data.deviceIds);
         setRfidDevices(data.deviceIds || []);
       } catch (err) {
         console.error("Error fetching RFID devices:", err);

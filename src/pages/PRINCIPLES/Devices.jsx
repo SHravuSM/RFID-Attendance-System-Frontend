@@ -15,7 +15,6 @@ const InstitutionDevices = () => {
       const res = await api.get("/institution/rfid/devices");
       setDevices(res.data.deviceIds || []);
       setStatus(res.data.status || "");
-      console.log(res.data)
       setSubscriptionEndDate(res.data.subscriptionEndDate || "");
     } catch (error) {
       console.error("Error fetching devices:", error);
@@ -107,14 +106,7 @@ const InstitutionDevices = () => {
                       {status}
                     </td>
                     <td className="px-6 py-4 text-gray-700">
-                      {new Date(subscriptionEndDate).toLocaleDateString(
-                        "en-IN",
-                        {
-                          year: "numeric",
-                          month: "long",
-                          day: "numeric",
-                        }
-                      )}
+                      {subscriptionEndDate.split(",")[0]}
                     </td>
                   </tr>
                 ))}

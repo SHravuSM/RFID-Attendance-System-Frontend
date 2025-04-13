@@ -15,6 +15,7 @@ const InstitutionDevices = () => {
       const res = await api.get("/institution/rfid/devices");
       setDevices(res.data.deviceIds || []);
       setStatus(res.data.status || "");
+      console.log(res.data)
       setSubscriptionEndDate(res.data.subscriptionEndDate || "");
     } catch (error) {
       console.error("Error fetching devices:", error);

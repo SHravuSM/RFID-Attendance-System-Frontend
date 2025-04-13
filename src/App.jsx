@@ -29,6 +29,7 @@ import ITeachers from "./pages/PRINCIPLES/Teachers";
 import IAddStudent from "./pages/PRINCIPLES/AddStudent";
 import IAttendance from "./pages/PRINCIPLES/Attendance";
 import RFIDDeviceSelector from "./pages/PRINCIPLES/RFIDDeviceSelector";
+import InstitutionDetail from "./pages/ADMIN/InstitutionDetail";
 
 const App = () => {
   const { user } = useAuth();
@@ -63,6 +64,10 @@ const App = () => {
       >
         <Route index element={<AHome />} />
         <Route path="institutions" element={<ASchools />} />
+        <Route
+          path="institutions/:institutionName"
+          element={<InstitutionDetail />}
+        />
         <Route path="students" element={<AStudents />} />
         <Route path="teachers" element={<ATeachers />} />
         <Route path="assign-device" element={<AssignDevice />} />
@@ -86,11 +91,11 @@ const App = () => {
         <Route path="students" element={<IStudents />} />
         <Route path="teachers" element={<ITeachers />} />
         <Route path="attendance" element={<IAttendance />} />
+        <Route path="rfiddevice" element={<RFIDDeviceSelector />} />
         <Route
           path="rfiddevice/:deviceId/add-student"
           element={<IAddStudent />}
         />
-        <Route path="rfiddevice" element={<RFIDDeviceSelector />} />
       </Route>
 
       {/* Add more routes as needed */}

@@ -33,8 +33,7 @@ const IHome = () => {
   const stats = [
     {
       label: "Students",
-      value:
-        data.subscriptionStatus !== "expired" ? data.totalStudents : "",
+      value: data.subscriptionStatus !== "expired" ? data.totalStudents : "",
       icon: Users,
       color: "bg-blue-100 text-blue-700",
     },
@@ -60,20 +59,20 @@ const IHome = () => {
   ];
 
   const alerts = [
-    { text: "3 students absent for 3+ days", action: "View" },
-    { text: "Attendance pending for Class 9-B", action: "Mark Now" },
-    { text: "New teacher verification pending", action: "Review" },
+    // { text: "3 students absent for 3+ days", action: "View" },
+    // { text: "Attendance pending for Class 9-B", action: "Mark Now" },
+    // { text: "New teacher verification pending", action: "Review" },
   ];
 
   const activities = [
-    "✅ Attendance marked for Class 10-A at 9:05 AM",
-    "➕ New teacher 'Mrs. Rani' added yesterday",
-    "🔄 Class timings updated for Class 6-B",
+    // "✅ Attendance marked for Class 10-A at 9:05 AM",
+    // "➕ New teacher 'Mrs. Rani' added yesterday",
+    // "🔄 Class timings updated for Class 6-B",
   ];
 
   const events = [
-    { title: "Parent-Teacher Meeting - 2nd April", action: "View Details" },
-    { title: "Annual Sports Day - 20th April", action: "View Details" },
+    // { title: "Parent-Teacher Meeting - 2nd April", action: "View Details" },
+    // { title: "Annual Sports Day - 20th April", action: "View Details" },
   ];
 
   return (
@@ -153,8 +152,8 @@ const IHome = () => {
       </div>
 
       {/* Alerts & Notifications */}
+      {/* Urgent Alerts */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Urgent Alerts */}
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}

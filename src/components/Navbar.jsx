@@ -29,9 +29,9 @@ export default function Navbar() {
         {/* Logo */}
         <Link
           to="/"
-          className="text-3xl font-mono font-medium text-blue-700 tracking-wide"
+          className="text-4xl font-serif font-medium text-blue-700 tracking-wide"
         >
-          ShantShiv
+          Meteor
         </Link>
 
         {/* Login Button (Icon for Mobile, Text for Desktop) */}

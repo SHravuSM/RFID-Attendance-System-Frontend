@@ -41,7 +41,7 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 // import { Menu, X } from "lucide-react";
 
-export default function Hero({onGetStartedClick}) {
+export default function Hero({ onGetStartedClick }) {
   return (
     <section className="flex flex-col font-mono items-center justify-center text-center gap-6 pt-24 pb-8 px-4 bg-gradient-to-br from-blue-50 to-white">
       <motion.h1
@@ -61,7 +61,8 @@ export default function Hero({onGetStartedClick}) {
         transition={{ duration: 1 }}
         className="text-gray-600 max-w-xl text-lg"
       >
-        Next-gen attendance system for Schools, Colleges & Organizations. Automate, Monitor & Manage attendance in real-time.
+        Next-gen attendance system for Schools, Colleges & Organizations.
+        Automate, Monitor & Manage attendance in real-time.
       </motion.p>
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
@@ -70,8 +71,9 @@ export default function Hero({onGetStartedClick}) {
         className="flex gap-4"
       >
         {/* <Link */}
-          {/* // to="/login" */}
-          <button onClick={onGetStartedClick}
+        {/* // to="/login" */}
+        <button
+          onClick={onGetStartedClick}
           className="px-6 py-3 rounded-full text-white font-semibold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-500 shadow-md hover:shadow-xl hover:scale-105 transition-all duration-300"
         >
           Get Started

@@ -232,7 +232,7 @@ const Login = () => {
         className="relative bg-gray-50 p-8 rounded-2xl w-full max-w-md border border-gray-200 shadow-xl transition-all duration-200"
       >
         <h2 className="text-2xl font-semibold mb-6 text-center text-gray-800">
-          Karthia Login
+          Meteor Login
         </h2>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">

@@ -323,7 +323,7 @@ const AHome = () => {
         className="bg-gradient-to-r from-indigo-500 to-indigo-700 p-6 rounded-xl text-white shadow-md flex flex-col md:flex-row justify-between items-center"
       >
         <div>
-          <h2 className="text-2xl font-bold mb-2">Welcome back, Admin 👑</h2>
+          <h2 className="text-2xl font-bold mb-2">Welcome back, Admin</h2>
           <p className="text-sm text-indigo-100">
             Platform Dashboard Overview - {today}
           </p>

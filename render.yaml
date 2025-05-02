@@ -1,0 +1,7 @@
+services:
+  - type: static
+    name: rfid-react-frontend
+    env: static
+    buildCommand: npm run build
+    staticPublishPath: build
+    pullRequestPreviewsEnabled: true

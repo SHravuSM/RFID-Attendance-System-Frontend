@@ -29,7 +29,7 @@ export default function Navbar() {
         {/* Logo */}
         <Link
           to="/"
-          className="text-4xl font-serif font-medium text-blue-700 tracking-wide"
+          className="text-xl font-serif font-medium text-blue-700 tracking-wide"
         >
           RFID Attendance System
         </Link>

@@ -1,28 +1,3 @@
-// const Footer = () => {
-//   return (
-//     <footer className="py-6 bg-gray-100 text-center text-gray-700 hover:text-blue-600 transition-all">
-//       <p>&copy; {new Date().getFullYear()} RFID Attendance System.</p>
-//     </footer>
-//   );
-// };
-
-// export default Footer;
-
-// import { motion } from "framer-motion";
-
-// export default function Footer() {
-//   return (
-//     <motion.footer
-//       className="py-8 bg-gray-100 text-center text-gray-700"
-//       initial={{ opacity: 0, y: 20 }}
-//       whileInView={{ opacity: 1, y: 0 }}
-//       transition={{ duration: 0.8 }}
-//     >
-//       <p>&copy; {new Date().getFullYear()} RFID Attendance System. All rights reserved.</p>
-//     </motion.footer>
-//   );
-// }
-
 export default function Footer() {
   return (
     <footer className="bg-gray-900 text-gray-300 py-4 px-6 md:px-12 font-extralight font-mono">
@@ -32,8 +7,8 @@ export default function Footer() {
           <h2 className="text-2xl  font-bold text-white mb-1">
             {/* <span className="font-sans text-red-600">Shant</span> */}
             {/* <span className="mr-1"></span> */}
-            <span className="text-white">Meteor</span>{" "}
-            <span className="text-blue-500">Technologies</span>
+            {/* <span className="text-white">Meteor</span>{" "} */}
+            {/* <span className="text-blue-500">Technologies</span> */}
             <br />
           </h2>
           <p className="text-sm font-sans leading-relaxed text-gray-400">
@@ -55,9 +30,9 @@ export default function Footer() {
             Contact
           </h3>
           <p className="text-sm text-gray-400 mb-2 tracking-wider">
-            support@meteor.com
+            support@rfidsystems.com
           </p>
-          <p className="text-sm text-gray-400">+91 7411361004</p>
+          <p className="text-sm text-gray-400">+91 987654321</p>
         </div>
       </div>
 

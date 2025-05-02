@@ -60,6 +60,7 @@ const IClasses = () => {
 
   const sortedClasses = [...classes].sort((a, b) => {
     let valA, valB;
+
     if (sortBy === "averageAttendance") {
       valA = parseFloat(a.averageAttendance) || 0;
       valB = parseFloat(b.averageAttendance) || 0;
@@ -67,8 +68,21 @@ const IClasses = () => {
       valA = a.studentCount;
       valB = b.studentCount;
     } else {
-      valA = a.className.toLowerCase();
-      valB = b.className.toLowerCase();
+      const extractParts = (str) => {
+        const match = str.match(/^(\d+)([A-Za-z]*)$/);
+        return match ? [parseInt(match[1], 10), match[2]] : [0, str];
+      };
+
+      const [numA, letterA] = extractParts(a.className);
+      const [numB, letterB] = extractParts(b.className);
+
+      if (numA !== numB) {
+        return sortDirection === "asc" ? numA - numB : numB - numA;
+      }
+
+      if (letterA < letterB) return sortDirection === "asc" ? -1 : 1;
+      if (letterA > letterB) return sortDirection === "asc" ? 1 : -1;
+      return 0;
     }
 
     if (valA < valB) return sortDirection === "asc" ? -1 : 1;
@@ -93,9 +107,9 @@ const IClasses = () => {
         </div>
 
         {/* Add Class Form */}
-        <form
+        {/* <form
           onSubmit={handleAddClass}
-          className="shadow-lg bg-indigo-50 hover:scale-105 duration-700 border-gray-200 rounded-2xl p-4 sm:p-6 flex flex-col sm:flex-row gap-4 items-stretch sm:items-center"
+          className="shadow-lg rounded-2xl sm:p-6 flex flex-col sm:flex-row gap-4 items-stretch sm:items-center"
         >
           <input
             type="text"
@@ -117,6 +131,34 @@ const IClasses = () => {
             {loading ? "Adding..." : "Add Class"}
           </button>
         </form>
+        
+        */}
+        <form
+          onSubmit={handleAddClass}
+          className="w-full max-w-xl mx-auto flex flex-col sm:flex-row items-stretch sm:items-center gap-3 border-t border-gray-200 pt-6"
+        >
+          <input
+            type="text"
+            value={newClassName}
+            onChange={(e) => setNewClassName(e.target.value)}
+            placeholder="Class name (e.g. 10A)"
+            className="w-full px-4 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-black focus:border-black placeholder-gray-400 transition"
+          />
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-white bg-black hover:bg-neutral-800 rounded-md transition disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {loading ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <Plus size={16} />
+            )}
+            {loading ? "Adding..." : "Add"}
+          </button>
+        </form>
+
 
         {/* Table */}
         <div className="overflow-x-auto bg-white shadow-md rounded-xl border border-gray-200">

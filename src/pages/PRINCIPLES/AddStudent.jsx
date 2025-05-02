@@ -1,8 +1,8 @@
 // import Loader from "./Loader";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import Loader from "./Loader1";
 import api from "../../api";
-import { useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { Trash2 } from "lucide-react"; // assuming you're using lucide-react
 
 export default function IAddStudent() {
@@ -13,6 +13,7 @@ export default function IAddStudent() {
   const [selectedRole, setSelectedRole] = useState("");
   const { deviceId } = useParams();
   const [formData, setFormData] = useState({});
+  const [count, setCount] = useState(1);
 
   const fetchClasses = async () => {
     try {
@@ -46,7 +47,7 @@ export default function IAddStudent() {
       }
     }, 2000);
     return () => clearInterval(interval);
-  }, [deviceId]);
+  }, [deviceId, count]);
 
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -54,8 +55,9 @@ export default function IAddStudent() {
 
   const handleDelete = async (Id) => {
     const res = await api.delete(`/rfid/delete/${Id}`);
-    setPendingUser(null);
     setShowModal(false);
+    setPendingUser(null);
+    setCount((pre) => pre + 1);
   };
 
   const handleSubmit = async (e) => {

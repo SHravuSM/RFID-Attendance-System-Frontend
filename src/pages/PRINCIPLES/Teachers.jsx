@@ -342,7 +342,6 @@
 
 // export default Teachers;
 
-
 import React, { useEffect, useState } from "react";
 import api from "../../api";
 import { FaSearch, FaDownload } from "react-icons/fa";
@@ -353,6 +352,8 @@ export default function ITeachers() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedTeacher, setSelectedTeacher] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [sortField, setSortField] = useState("name");
+  const [sortOrder, setSortOrder] = useState("asc");
 
   useEffect(() => {
     const fetchTeachers = async () => {
@@ -375,6 +376,24 @@ export default function ITeachers() {
     );
     setFilteredTeachers(filtered);
   }, [searchTerm, teachers]);
+
+  const handleSort = (field) => {
+    if (sortField === field) {
+      setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"));
+    } else {
+      setSortField(field);
+      setSortOrder("asc");
+    }
+  };
+
+  const sortedTeachers = [...filteredTeachers].sort((a, b) => {
+    const valA = a[sortField]?.toString().toLowerCase() || "";
+    const valB = b[sortField]?.toString().toLowerCase() || "";
+
+    if (valA < valB) return sortOrder === "asc" ? -1 : 1;
+    if (valA > valB) return sortOrder === "asc" ? 1 : -1;
+    return 0;
+  });
 
   const openModal = (teacher) => {
     setSelectedTeacher(teacher);
@@ -418,25 +437,49 @@ export default function ITeachers() {
             <table className="min-w-full bg-white rounded-xl shadow overflow-hidden">
               <thead className="bg-green-100 text-green-800">
                 <tr>
-                  <th className="text-left px-6 py-3 text-sm font-semibold uppercase">Name</th>
-                  <th className="text-left px-6 py-3 text-sm font-semibold uppercase">Subject</th>
-                  <th className="text-left px-6 py-3 text-sm font-semibold uppercase">Email</th>
-                  <th className="text-left px-6 py-3 text-sm font-semibold uppercase">Phone</th>
+                  <th
+                    className="text-left px-6 py-3 text-sm font-semibold uppercase cursor-pointer"
+                    onClick={() => handleSort("name")}
+                  >
+                    Name {sortField === "name" && (sortOrder === "asc" ? "↑" : "↓")}
+                  </th>
+                  <th
+                    className="text-left px-6 py-3 text-sm font-semibold uppercase cursor-pointer"
+                    onClick={() => handleSort("className")}
+                  >
+                    Class {sortField === "className" && (sortOrder === "asc" ? "↑" : "↓")}
+                  </th>
+                  <th
+                    className="text-left px-6 py-3 text-sm font-semibold uppercase cursor-pointer"
+                    onClick={() => handleSort("subject")}
+                  >
+                    Subject {sortField === "subject" && (sortOrder === "asc" ? "↑" : "↓")}
+                  </th>
+                  <th
+                    className="text-left px-6 py-3 text-sm font-semibold uppercase"
+                  >
+                    Email
+                  </th>
+                  <th
+                    className="text-left px-6 py-3 text-sm font-semibold uppercase"
+                  >
+                    Phone
+                  </th>
                 </tr>
               </thead>
               <tbody>
-                {filteredTeachers.map((teacher, index) => (
+                {sortedTeachers.map((teacher, index) => (
                   <tr
                     key={teacher._id}
-                    className={`cursor-pointer transition hover:bg-green-50 ${
-                      index % 2 === 0 ? "bg-white" : "bg-gray-50"
-                    }`}
+                    className={`cursor-pointer transition hover:bg-green-50 ${index % 2 === 0 ? "bg-white" : "bg-gray-50"
+                      }`}
                     onClick={() => openModal(teacher)}
                   >
                     <td className="px-6 py-4 text-gray-800 font-medium">{teacher.name}</td>
+                    <td className="px-6 py-4 text-gray-700">{teacher.className}</td>
                     <td className="px-6 py-4 text-gray-700">{teacher.subject}</td>
                     <td className="px-6 py-4 text-gray-700">{teacher.email}</td>
-                    <td className="px-6 py-4 text-gray-700">{teacher.phone}</td>
+                    <td className="px-6 py-4 text-gray-700">{teacher.contactNumber}</td>
                   </tr>
                 ))}
               </tbody>
@@ -468,7 +511,7 @@ export default function ITeachers() {
                 <p><span className="font-semibold">Full Name:</span> {selectedTeacher.name}</p>
                 <p><span className="font-semibold">Subject:</span> {selectedTeacher.subject}</p>
                 <p><span className="font-semibold">Email:</span> {selectedTeacher.email}</p>
-                <p><span className="font-semibold">Phone:</span> {selectedTeacher.phone}</p>
+                <p><span className="font-semibold">Phone:</span> {selectedTeacher.contactNumber}</p>
                 <p className="sm:col-span-2"><span className="font-semibold">Address:</span> {selectedTeacher.address || "N/A"}</p>
               </div>
 

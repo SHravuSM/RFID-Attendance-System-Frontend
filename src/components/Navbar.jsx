@@ -31,7 +31,7 @@ export default function Navbar() {
           to="/"
           className="text-4xl font-serif font-medium text-blue-700 tracking-wide"
         >
-          Meteor
+          RFID Attendance System
         </Link>
 
         {/* Login Button (Icon for Mobile, Text for Desktop) */}

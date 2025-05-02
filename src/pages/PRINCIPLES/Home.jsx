@@ -101,7 +101,7 @@ const IHome = () => {
                   />
                 </motion.div>
                 <span className="text-sm font-mono font-light">
-                  {data.subsctiptionEndsOn?.split(",").join(" -")}
+                  {data.subsctiptionEndsOn?.split(",")[0]}
                 </span>
               </span>
             ) : (

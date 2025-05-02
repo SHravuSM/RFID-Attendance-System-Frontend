@@ -175,7 +175,7 @@ export default function IAccount() {
   const { logout } = useAuth();
 
   const user = {
-    name: `Mr. ${data.principalName}`,
+    name: `Mr/Mrs. ${data.principalName}`,
     institutionCode: `${data.institutionCode}`,
     email: data.email,
     role: "Principal",
@@ -224,7 +224,7 @@ export default function IAccount() {
         setCurrentPassword("");
         setNewPassword("");
         setMessage("");
-      }, 2000);
+      }, 500);
     } catch (err) {
       const msg = err.response?.data?.error || "Failed to change password.";
       setError(msg);

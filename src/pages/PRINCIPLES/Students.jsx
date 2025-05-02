@@ -398,9 +398,9 @@ export default function IStudents() {
                   >
                     Roll No {renderSortIcon("rollNumber")}
                   </th>
-                  <th className="text-left px-6 py-3 text-sm font-semibold uppercase">
+                  {/* <th className="text-left px-6 py-3 text-sm font-semibold uppercase">
                     Parent Name
-                  </th>
+                  </th> */}
                   <th className="text-left px-6 py-3 text-sm font-semibold uppercase">
                     Parent Contact
                   </th>
@@ -424,9 +424,9 @@ export default function IStudents() {
                     <td className="px-6 py-4 text-gray-700">
                       {student.rollNumber}
                     </td>
-                    <td className="px-6 py-4 text-gray-700">
+                    {/* <td className="px-6 py-4 text-gray-700">
                       {student.parentName}
-                    </td>
+                    </td> */}
                     <td className="px-6 py-4 text-gray-700">
                       {student.parentContactNumber}
                     </td>
